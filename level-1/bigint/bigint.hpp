@@ -34,7 +34,21 @@ class bigint
 		bigint &operator<<=(const bigint &other);
 		bigint &operator>>=(const bigint &other);
 
+		bool operator==(const bigint &other) const;
+		bool operator!=(const bigint &other) const;
+		bool operator>(const bigint &other) const;
+		bool operator<(const bigint &other) const;
+		bool operator>=(const bigint &other) const;
+		bool operator<=(const bigint &other) const;
 
+		~bigint();
+
+	private:
+		std::string _addition(const bigint &obj1, const bigint &obj2)const;
+		std::string _reverse(const std::string &str) const;
+		unsigned int _strToUnsignedInt(const std::string &str) const;
 };
+
+std::ostream &operator<<(std::ostream &out, const bigint &obj);
 
 #endif // BIGINT_HPP
