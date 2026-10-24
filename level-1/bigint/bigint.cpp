@@ -29,3 +29,12 @@ std::string bigint::getStr(void) const
 	return _data;
 }
 
+std::string bigint::_reverse(const std::string &str) const
+{
+	std::string reversedStr = str;
+
+	for (int i = str.size(); i > 0; i--)
+		reversedStr[str.size() - i] = str[i - 1];
+	return reversedStr;
+}
+
