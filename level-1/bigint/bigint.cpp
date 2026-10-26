@@ -1,5 +1,5 @@
 #include "bigint.hpp"
-#include <sstream>
+
 
 bigint::bigint() : _data ("0") {}
 

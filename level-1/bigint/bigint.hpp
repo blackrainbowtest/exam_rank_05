@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 class bigint
 {
@@ -11,14 +12,14 @@ class bigint
 	
 	public:
 		bigint();
-		bigint(unisgned int num);
+		bigint(unsigned int num);
 		bigint(const bigint &other);
 
-		bigint operator=(const bigint &other);
+		bigint &operator=(const bigint &other);
 		
 		std::string getStr()const;
 
-		bigint operator+(const bigint const &other) const;
+		bigint operator+(const bigint &other) const;
 		bigint &operator+=(const bigint &other);
 
 		bigint &operator++();
