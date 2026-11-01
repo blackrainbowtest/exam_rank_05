@@ -6,8 +6,8 @@
 class vect2
 {
 	private:
-		int x;
-		int y;
+		int _x;
+		int _y;
 	public:
 		vect2();
 		vect2(int x, int y);
@@ -37,6 +37,8 @@ class vect2
 
 		bool operator==(const vect2& obj) const;
 		bool operator!=(const vect2& obj) const;
+
+		vect2 operator-() const;
 };
 
 vect2 operator*(int s, const vect2& obj);
