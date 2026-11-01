@@ -1,30 +1,54 @@
 #include "bigint.hpp"
 
-bigint::bigint() : _value("0") {}
-bigint::bigint(unsigned int num)
+bigint::bigint() : value(0) {}
+bigint::bigint (unsigned int v)
 {
 	std::stringstream ss;
 
-	ss << num;
-	_value = ss.str();
+	ss << v;
+	_data = ss.str();
 }
-bigint::bigint(const bigint &other) : _value(other._value) {}
+bigint::bigint(const bigint& obj) : _data(obj._data) {}
 bigint::~bigint() {}
 
-bigint& bigint::operator=(const bigint &other)
+bigint& bigint::operator=(const bigint& obj)
 {
-	if (this != &other)
-		_value = other._value;
+	if (this != &obj)
+	{
+		_data = obj._data;
+	}
 	return (*this);
 }
 
-static unsigned int stringToUINT(const std::string &str)
+// == != > < >= <=
+bool bigint::operator==(const bigint& obj) const
 {
-	std::stringstream ss(str);
-	unsigned int res = 0;
-
-	ss >> res;
-	return (res);
+	return (_data == obj._data);
 }
 
-// operator
+bool bigint::operator!=(const bigint& obj) const
+{
+	return (!(*this == obj));
+}
+
+bool bigint::operator<(const bigint& obj) const
+{
+	if(_data.size() != obj._data.size())
+		return (_data.size() < obj._data.size());
+	return (_data < obj._data);
+}
+
+bool bigint::operator>(const bigint& obj) const
+{
+	return (obj < *this);
+}
+
+bool bigint::operator<=(const bigint& obj) const
+{
+	return (!(*this > obj));
+}
+
+bool bigint::operator>=(const bigint& obj) const
+{
+	return (!(*this < obj));
+}
