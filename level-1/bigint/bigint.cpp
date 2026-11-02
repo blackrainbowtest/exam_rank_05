@@ -58,20 +58,18 @@ bigint bigint::operator+(const bigint& obj) const
 	bigint result;
 	std::string res;
 
-	int i = _data.size() - 1;
-	int j = obj._data.size() - 1;
-
+	int i = _data.size() -1;
+	int j = obj._data.size() -1;
 	int carry = 0;
 
-	while(i >= 0 || j>= 0 || carry)
+	while (i >= 0 || j >= 0 || carry)
 	{
 		int sum = carry;
-
 		if (i >= 0)
-		    sum += _data[i--] - '0';
+			sum += _data[i--] -'0';
 		if (j >= 0)
-		    sum += obj._data[j--] -'0';
-		res.insert(res.begin(), sum % 10 + '0');
+			sum += obj._data[j--] - '0';
+		res.insert(res.begin(), (sum % 10) + '0');
 
 		carry = sum / 10;
 	}
