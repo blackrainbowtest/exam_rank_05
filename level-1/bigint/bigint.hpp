@@ -16,6 +16,14 @@ class bigint
 		~bigint();
 
 		bigint& operator=(const bigint& obj);
+
+		bool operator==(const bigint& obj) const;
+		bool operator!=(const bigint& obj) const;
+
+		bool operator<(const bigint& obj) const;
+		bool operator>(const bigint& obj) const;
+		bool operator<=(const bigint& obj) const;
+		bool operator>=(const bigint& obj) const;
 };
 
 std::ostream operator<<(std::ostream& out, const bigint& obj);
