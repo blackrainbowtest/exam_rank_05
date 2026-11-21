@@ -98,6 +98,26 @@ int count_neighbors(t_life* life, int x, int y)
 	return (count);
 }
 
+void swapboards(t_life* life)
+{
+	char* tmp;
+
+	tmp = life->board;
+	life->board = life->next;
+	life->next = tmp;
+}
+
+void clearboard(char* board, int size)
+{
+	int i = 0;
+
+	while (i < size)
+	{
+		board[i] = 0;
+		i++;
+	}
+}
+
 
 int main(int argc, char **argv)
 {
