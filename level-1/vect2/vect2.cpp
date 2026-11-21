@@ -12,22 +12,17 @@ vect2& vect2::operator=(const vect2& v)
 		x = v.x;
 		y = v.y;
 	}
-	return *this;
-}
-
-vect2 vect2::operator-() const
-{
-	return (vect2(-x, -y));
+	return (*this);
 }
 
 vect2& vect2::operator*=(int s)
 {
 	x *= s;
 	y *= s;
-	return *this;
+	return (*this);
 }
 
-vect2 vect2::operator*(int s) const
+vect2  vect2::operator*(int s) const
 {
 	return (vect2(x * s, y * s));
 }
@@ -36,22 +31,22 @@ vect2& vect2::operator+=(const vect2& v)
 {
 	x += v.x;
 	y += v.y;
-	return *this;
+	return (*this);
 }
 
-vect2& vect2::operator-=(const vect2& v)
+vect2&  vect2::operator-=(const vect2& v)
 {
 	x -= v.x;
 	y -= v.y;
-	return *this;
+	return (*this);
 }
 
-vect2 vect2::operator+(const vect2& v) const
+vect2  vect2::operator+(const vect2& v) const
 {
 	return (vect2(x + v.x, y + v.y));
 }
 
-vect2 vect2::operator-(const vect2& v) const
+vect2  vect2::operator-(const vect2& v) const
 {
 	return (vect2(x - v.x, y - v.y));
 }
@@ -66,7 +61,7 @@ int& vect2::operator[](int i)
 const int& vect2::operator[](int i) const
 {
 	if (i == 0)
-		return x;
+			return x;
 	return y;
 }
 
@@ -77,44 +72,49 @@ bool vect2::operator==(const vect2& v) const
 
 bool vect2::operator!=(const vect2& v) const
 {
-	return !(*this == v);
+	return (!(*this == v));
 }
 
 vect2& vect2::operator++()
 {
-	++x;
-	++y;
-	return *this;
-}
-
-vect2 vect2::operator++(int)
-{
-	vect2 temp(*this);
-	++(*this);
-	return temp;
+	x += 1;
+	y += 1;
+	return (*this);
 }
 
 vect2& vect2::operator--()
 {
-	--x;
-	--y;
-	return *this;
+	x -= 1;
+	y -= 1;
+	return (*this);
 }
 
-vect2 vect2::operator--(int)
+vect2  vect2::operator++(int)
 {
-	vect2 temp(*this);
+	vect2 tmp(*this);
+	++(*this);
+	return(tmp);
+}
+
+vect2  vect2::operator--(int)
+{
+	vect2 tmp(*(this));
 	--(*this);
-	return temp;
+	return (tmp);
 }
 
-vect2 operator*(int s, const vect2& v)
+vect2  vect2::operator-() const
 {
-	return (vect2(v[1] * s, v[2] * s));
+	return (vect2(-x, -y));
+}
+
+vect2  operator*(int s, const vect2& v)
+{
+	return (v * s);
 }
 
 std::ostream& operator<<(std::ostream& o, const vect2& v)
 {
-	o << "(" << v[1] << ", " << v[2] << ")";
+	o << "{" << v[0] << ", " << v[1] << "}";
 	return o;
 }
