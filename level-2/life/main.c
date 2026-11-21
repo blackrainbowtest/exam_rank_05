@@ -73,6 +73,30 @@ void printboard(t_life* life)
 	}
 }
 
+int count_neighbors(t_life* life, int x, int y)
+{
+	int count, dx, dy, nx, ny = 0;
+
+	count = 0;
+	dy = -1;
+	while (dy <= 1)
+	{
+		dx = -1;
+		while (dx <= 1)
+		{
+			if (!(dx == 0 && dy == 0))
+			{
+				nx = x + dx;
+				ny = y + dy;
+				if (inside(life, nx, ny))
+					count += life->board[getindex(life, nx, ny)];
+			}
+			dx++;
+		}
+		dy++;
+	}
+	return (count);
+}
 
 
 int main(int argc, char **argv)
