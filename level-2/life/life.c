@@ -30,7 +30,7 @@ void drawcell(t_life* life, int x, int y)
 void readinput(t_life* life)
 {
 	char c;
-	int x, y, pen = 0;
+	int x = 0, y = 0, pen = 0;
 
 	while (read(0, &c, 1) > 0)
 	{
@@ -38,13 +38,13 @@ void readinput(t_life* life)
 			pen = !pen;
 		else
 		{
-			if (c == 'w')
+			if (c == 'w' && y > 0)
 				y--;
-			else if (c == 's')
+			else if (c == 's' && y < life->height - 1)
 				y++;
-			else if (c == 'a')
+			else if (c == 'a' && x > 0)
 				x--;
-			else if (c == 'd')
+			else if (c == 'd' && x < life->width - 1)
 				x++;
 		}
 		if (pen)
@@ -54,7 +54,7 @@ void readinput(t_life* life)
 
 void printboard(t_life* life)
 {
-	int x, y = 0;
+	int x = 0, y = 0;
 
 	y = 0;
 	while (y < life->height)
@@ -118,6 +118,46 @@ void clearboard(char* board, int size)
 	}
 }
 
+void step(t_life* life)
+{
+	int x, y, neighbors, pos = 0;
+
+	y = 0;
+	while (y < life->height)
+	{
+		x = 0;
+		while (x < life->width)
+		{
+			pos = getindex(life, x, y);
+			neighbors = count_neighbors(life, x, y);
+			life->next[pos] = 0;
+			if (life->board[pos] && (neighbors == 2 || neighbors == 3))
+				life->next[pos] = 1;
+			else
+			{
+				if (neighbors == 3)
+					life->next[pos] = 1;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+void simulate(t_life* life)
+{
+	int i, size;
+
+	i = 0;
+	size = life->width * life->height;
+	while (i < life->iterations)
+	{
+		clearboard(life->next, size);
+		step(life);
+		swapboards(life);
+		i++;
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -142,7 +182,7 @@ int main(int argc, char **argv)
 	}
 	// main path
 	readinput(&life);
-
+	simulate(&life);
 	printboard(&life);
 	free(life.board);
 	free(life.next);
