@@ -7,27 +7,28 @@ typedef struct s_life
 	int width;
 	int height;
 	int iterations;
+
 	char* board;
 	char* next;
 } t_life;
 
-int getindex (t_life* life, int x, int y)
+int getIndex(t_life* life, int x, int y)
 {
 	return (y * life->width + x);
 }
 
-int inside (t_life* life, int x, int y)
+int isInsaid(t_life* life, int x, int y)
 {
-	return (x >= 0 && y >= 0 && x< life->width && y < life->height);
+	return (x >= 0 && x < life->width && y >= 0 && y < life->height);
 }
 
-void drawcell(t_life* life, int x, int y)
+void drawInCell(t_life* life, int x, int y)
 {
-	if (inside(life, x, y))
-		life->board[getindex(life, x, y)] = 1;
+	if (isInsaid(life, x, y))
+		life->board[getIndex(life, x, y)] = 1;
 }
 
-void readinput(t_life* life)
+void userInput(t_life* life)
 {
 	char c;
 	int x = 0, y = 0, pen = 0;
@@ -36,48 +37,32 @@ void readinput(t_life* life)
 	{
 		if (c == 'x')
 			pen = !pen;
-		else
-		{
-			if (c == 'w' && y > 0)
-				y--;
-			else if (c == 's' && y < life->height - 1)
-				y++;
-			else if (c == 'a' && x > 0)
-				x--;
-			else if (c == 'd' && x < life->width - 1)
-				x++;
-		}
+		if (c == 'w' && y > 0)
+			y--;
+		if (c == 's' && y < life->height - 1)
+			y++;
+		if (c == 'a' && x > 0)
+			x--;
+		if (c == 'd' && x < life->width - 1)
+			x++;
 		if (pen)
-			drawcell(life, x, y);
+			drawInCell(life, x, y);
 	}
 }
 
-void printboard(t_life* life)
+void clear_board(char* board, int size)
 {
-	int x = 0, y = 0;
+	int i = 0;
 
-	y = 0;
-	while (y < life->height)
-	{
-		x = 0;
-		while (x <life->width)
-		{
-			if (life->board[getindex(life, x, y)])
-				putchar('O');
-			else
-				putchar(' ');
-			x++;
-		}
-		putchar('\n');
-		y++;
-	}
+	while (i < size)
+		board[i++] = 0;
 }
 
 int count_neighbors(t_life* life, int x, int y)
 {
-	int count, dx, dy, nx, ny = 0;
+	int dx = -1, dy = -1, nx = 0, ny = 0;
+	int count = 0;
 
-	count = 0;
 	dy = -1;
 	while (dy <= 1)
 	{
@@ -88,8 +73,8 @@ int count_neighbors(t_life* life, int x, int y)
 			{
 				nx = x + dx;
 				ny = y + dy;
-				if (inside(life, nx, ny))
-					count += life->board[getindex(life, nx, ny)];
+				if (isInsaid(life, nx, ny))
+					count += life->board[getIndex(life, nx, ny)];
 			}
 			dx++;
 		}
@@ -98,92 +83,96 @@ int count_neighbors(t_life* life, int x, int y)
 	return (count);
 }
 
-void swapboards(t_life* life)
+void step (t_life* life)
 {
-	char* tmp;
+	int x = 0, y = 0, neigh = 0, pos = 0;
 
-	tmp = life->board;
-	life->board = life->next;
-	life->next = tmp;
-}
-
-void clearboard(char* board, int size)
-{
-	int i = 0;
-
-	while (i < size)
-	{
-		board[i] = 0;
-		i++;
-	}
-}
-
-void step(t_life* life)
-{
-	int x, y, neighbors, pos = 0;
-
-	y = 0;
 	while (y < life->height)
 	{
 		x = 0;
 		while (x < life->width)
 		{
-			pos = getindex(life, x, y);
-			neighbors = count_neighbors(life, x, y);
-			life->next[pos] = 0;
-			if (life->board[pos] && (neighbors == 2 || neighbors == 3))
-				life->next[pos] = 1;
-			else
+			pos = getIndex(life, x, y);
+			neigh = count_neighbors(life, x, y);
+
+			life->next[getIndex(life, x, y)] = 0;
+			if (life->board[pos] == 1 && (neigh == 2 || neigh == 3))
 			{
-				if (neighbors == 3)
-					life->next[pos] = 1;
+				life->next[pos] = 1;
 			}
+			else if (life->board[pos] == 0 && neigh == 3)
+			{
+				life->next[pos] = 1;
+			}
+
 			x++;
 		}
 		y++;
 	}
 }
 
+void swap_board(t_life* life)
+{
+	char* tmp = life->board;
+	life->board = life->next;
+	life->next = tmp;
+
+}
+
 void simulate(t_life* life)
 {
-	int i, size;
+	int i = 0;
 
-	i = 0;
-	size = life->width * life->height;
 	while (i < life->iterations)
 	{
-		clearboard(life->next, size);
+		clear_board(life->next, life->width * life->height);
 		step(life);
-		swapboards(life);
+		swap_board(life);
 		i++;
 	}
 }
 
-int main(int argc, char **argv)
+void print_board(t_life* life)
 {
-	t_life life;
-	int size;
+	int x = 0, y = 0;
 
+	while (y < life->height)
+	{
+		x = 0;
+		while (x < life->width)
+		{
+			if (life->board[getIndex(life, x, y)])
+				putchar('O');
+			else
+				putchar(' ');
+			x++;
+		}
+		putchar('\n');
+		y++;
+	}
+}
+
+int main(int argc, char** argv)
+{
 	if (argc != 4)
 		return (1);
+	t_life life;
 	life.width = atoi(argv[1]);
 	life.height = atoi(argv[2]);
 	life.iterations = atoi(argv[3]);
 	if (life.width <= 0 || life.height <= 0 || life.iterations < 0)
 		return (1);
-	size = life.width * life.height;
-	life.board = calloc(size, sizeof(char));
-	life.next = calloc(size, sizeof(char));
+	life.board = calloc(life.width * life.height, sizeof(char));
+	life.next = calloc(life.width * life.height, sizeof(char));
 	if (!life.board || !life.next)
 	{
 		free(life.board);
 		free(life.next);
 		return (1);
 	}
-	// main path
-	readinput(&life);
+	userInput(&life);
 	simulate(&life);
-	printboard(&life);
+	print_board(&life);
 	free(life.board);
 	free(life.next);
 	return (0);
